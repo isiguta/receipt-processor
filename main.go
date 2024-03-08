@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,35 +22,77 @@ type receipt struct {
 	Total        string `json:"total"`
 }
 
-// TODO: Make a dictionary of {id:receipt} here!
+var receipts map[string]receipt // id:receipt
 
 type ProcessReceiptResponse struct {
 	ID string `json:"id"`
 }
 
-type GetReceiptPointsResponse struct {
+type GetPointsByReceiptIdResponse struct {
 	Points int32 `json:"points"`
 }
 
-func processReceipts(c *gin.Context) {
+func postReceipt(c *gin.Context) {
+	contentLength := c.Request.ContentLength
+	if contentLength == 0 {
+		c.JSON(http.StatusBadRequest, "Error: body request is not present!")
+		return
+	}
+
+	var incomingReceipt receipt
+
+	if err := c.BindJSON(incomingReceipt); err != nil {
+		log.Println("Error: Invalid JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		return
+	}
+
+	if id, ok := receipts[incomingReceipt.ID]; ok {
+		log.Println("%v already processed!", id) // Or what should we do?
+		return
+	}
+
+	receipts[incomingReceipt.ID] = incomingReceipt
 
 	response := ProcessReceiptResponse{
-		ID: "123",
+		ID: incomingReceipt.ID,
 	}
-	c.IndentedJSON(http.StatusAccepted, response)
+	c.IndentedJSON(http.StatusOK, response)
 }
 
-func getReceiptPoints(c *gin.Context) {
+func getPointsByReceiptId(c *gin.Context) {
+	contentLength := c.Request.ContentLength
+	if contentLength == 0 {
+		c.JSON(http.StatusBadRequest, "Error: body request is empty!")
+		return
+	}
 
-	response := GetReceiptPointsResponse{
+	receiptId := c.Param("id")
+
+	if receiptId == "" {
+		c.JSON(http.StatusBadRequest, "Error: receiptId value is not present in the request!")
+		return
+	}
+
+	_, ok := receipts[receiptId]
+
+	if !ok {
+		errorMessage := fmt.Sprintf("Error: Can't find receipt with id: %s", receiptId)
+		c.JSON(http.StatusNotFound, errorMessage)
+		return
+	}
+
+	//TODO: run calculations here!
+
+	response := GetPointsByReceiptIdResponse{
 		Points: 16,
 	}
-	c.IndentedJSON(http.StatusAccepted, response)
+	c.IndentedJSON(http.StatusOK, response)
 }
 
 func main() {
 	router := gin.Default()
-	router.POST("/receipts/process", processReceipts)
-	router.GET("/receipts/:id/points", getReceiptPoints)
-	router.Run("localhost:8088") // in case if you have something running on 8080 already.
+	router.POST("/receipts/process", postReceipt)
+	router.GET("/receipts/:id/points", getPointsByReceiptId)
+	router.Run(":8088") // in case if you have something running on 8080 already.
 }
