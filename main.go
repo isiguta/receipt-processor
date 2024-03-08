@@ -47,6 +47,9 @@ func postReceipt(c *gin.Context) {
 		return
 	}
 
+	// TODO: Generate receipt id here
+
+	// not sure we'll need it afterwards
 	if id, ok := receipts[incomingReceipt.ID]; ok {
 		log.Println("%v already processed!", id) // Or what should we do?
 		return
@@ -82,10 +85,27 @@ func getPointsByReceiptId(c *gin.Context) {
 		return
 	}
 
-	//TODO: run calculations here!
+	// temporary block
+	test_receipt := receipt{
+		ID:           "adb6b560-0eef-42bc-9d16-df48f30e89b2",
+		Retailer:     "target",
+		PurchaseDate: "2024-01-01",
+		PurchaseTime: "14:01",
+		Items: []Item{
+			{ShortDescription: "mountain dew", Price: "6.49"},
+			{ShortDescription: "Emils Cheese Pizza", Price: "12.25"},
+			{ShortDescription: "Knorr Creamy Chicken", Price: "1.26"},
+			{ShortDescription: "Doritos Nacho Cheese", Price: "3.35"},
+			{ShortDescription: "   Klarbrunn 12-PK 12 FL OZ  ", Price: "12.00"},
+		},
+		Total: "35.35",
+	}
+	// temporary block
+
+	points := CalculatePoints(&test_receipt)
 
 	response := GetPointsByReceiptIdResponse{
-		Points: 16,
+		Points: int32(points),
 	}
 	c.IndentedJSON(http.StatusOK, response)
 }
