@@ -85,9 +85,3 @@ func processPurchaseDateTime(date string, t string) int {
 
 	return date_pts
 }
-
-// Round rounds a float64 value to the specified number of decimal places
-func round(x float64, decimalPlaces int) float64 {
-	factor := math.Pow(10, float64(decimalPlaces))
-	return math.Round(x*factor) / factor
-}
