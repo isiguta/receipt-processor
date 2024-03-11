@@ -42,7 +42,7 @@ func postReceipt(c *gin.Context) {
 	var incomingReceipt receipt
 
 	if err := c.BindJSON(incomingReceipt); err != nil {
-		log.Println("Error: Invalid JSON: %v", err)
+		log.Printf("Error: Invalid JSON: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
@@ -51,7 +51,7 @@ func postReceipt(c *gin.Context) {
 
 	// not sure we'll need it afterwards
 	if id, ok := receipts[incomingReceipt.ID]; ok {
-		log.Println("%v already processed!", id) // Or what should we do?
+		log.Printf("%v already processed!", id) // Or what should we do?
 		return
 	}
 

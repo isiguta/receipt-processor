@@ -19,7 +19,7 @@ func TestCalculatePoints(t *testing.T) {
 
 	// Arrange
 	receipt := SetUpReceipt("Target", "2024-03-11", "12:01", "35.35", []Item{
-		{ShortDescription: "mountain dew", Price: "6.49"},
+		{ShortDescription: "Mountain Dew 12PK", Price: "6.49"},
 		{ShortDescription: "Emils Cheese Pizza", Price: "12.25"},
 		{ShortDescription: "Knorr Creamy Chicken", Price: "1.26"},
 		{ShortDescription: "Doritos Nacho Cheese", Price: "3.35"},
