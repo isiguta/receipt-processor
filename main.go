@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type Item struct {
@@ -14,7 +15,7 @@ type Item struct {
 }
 
 type receipt struct {
-	ID           string `json:"id"`
+	ID           string
 	Retailer     string `json:"retailer"`
 	PurchaseDate string `json:"purchaseDate"`
 	PurchaseTime string `json:"purchaseTime"`
@@ -22,7 +23,7 @@ type receipt struct {
 	Total        string `json:"total"`
 }
 
-var receipts map[string]receipt // id:receipt
+var receipts = make(map[string]receipt) // id:receipt
 
 type ProcessReceiptResponse struct {
 	ID string `json:"id"`
@@ -41,22 +42,18 @@ func postReceipt(c *gin.Context) {
 
 	var incomingReceipt receipt
 
-	if err := c.BindJSON(incomingReceipt); err != nil {
+	if err := c.BindJSON(&incomingReceipt); err != nil {
 		log.Printf("Error: Invalid JSON: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 		return
 	}
 
-	// TODO: Generate receipt id here
-
-	// not sure we'll need it afterwards
-	if id, ok := receipts[incomingReceipt.ID]; ok {
-		log.Printf("%v already processed!", id) // Or what should we do?
-		return
-	}
+	// Generate receipt id here
+	incomingReceipt.ID = uuid.New().String()
 
 	receipts[incomingReceipt.ID] = incomingReceipt
-
+	fmt.Printf("RECEIPT: %v\n", incomingReceipt)
+	fmt.Printf("ID: %v", incomingReceipt.ID)
 	response := ProcessReceiptResponse{
 		ID: incomingReceipt.ID,
 	}
@@ -64,12 +61,6 @@ func postReceipt(c *gin.Context) {
 }
 
 func getPointsByReceiptId(c *gin.Context) {
-	contentLength := c.Request.ContentLength
-	if contentLength == 0 {
-		c.JSON(http.StatusBadRequest, "Error: body request is empty!")
-		return
-	}
-
 	receiptId := c.Param("id")
 
 	if receiptId == "" {

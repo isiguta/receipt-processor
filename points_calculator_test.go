@@ -30,7 +30,7 @@ func TestCalculatePointsExample1(t *testing.T) {
 	pts := CalculatePoints(&receipt)
 
 	// Assert
-	fmt.Printf("Expected: %v", pts)
+	fmt.Printf("Expected: %v\n", pts)
 	if pts != 28 {
 		t.Fatalf("Expected and actual do not match! Expected: %v; Actual: %v", 28, pts)
 	}
@@ -49,7 +49,7 @@ func TestCalculatePointsExample2(t *testing.T) {
 	pts := CalculatePoints(&receipt)
 
 	// Assert
-	fmt.Printf("Expected: %v", pts)
+	fmt.Printf("Expected: %v\n", pts)
 	if pts != 109 {
 		t.Fatalf("Expected and actual do not match! Expected: %v; Actual: %v", 109, pts)
 	}
