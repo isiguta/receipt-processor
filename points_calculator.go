@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -14,7 +15,6 @@ func CalculatePoints(receipt *receipt) int {
 	points += processTotalAmount(receipt.Total)
 	points += processItems(receipt.Items)
 	points += processPurchaseDateTime(receipt.PurchaseDate, receipt.PurchaseTime)
-
 	return points
 }
 
@@ -32,11 +32,12 @@ func processTotalAmount(total string) int {
 	total_pts := 0
 
 	convertedTotal, err := strconv.ParseFloat(total, 64)
+
 	if err != nil {
 
 	}
 
-	if math.Mod(convertedTotal, 2) == 0 {
+	if math.Mod(convertedTotal, 1) == 0 {
 		total_pts += 50
 	}
 
@@ -64,8 +65,8 @@ func processItems(items []Item) int {
 
 func processPurchaseDateTime(date string, t string) int {
 	date_pts := 0
-	parsed_date, date_err := time.Parse("2000-01-02", date)
-	parsed_time, time_err := time.Parse("13:01", t)
+	parsedDate, date_err := time.Parse("2006-01-02", date)
+	parsedTime, time_err := time.Parse("15:04", t)
 
 	if date_err != nil {
 
@@ -75,11 +76,12 @@ func processPurchaseDateTime(date string, t string) int {
 
 	}
 
-	if parsed_date.Day()%2 != 0 {
+	if parsedDate.Day()%2 != 0 {
 		date_pts += 6
 	}
 
-	if parsed_time.Hour() > 14 && parsed_time.Hour() < 16 {
+	if parsedTime.Hour() >= 14 && parsedTime.Hour() <= 16 {
+		fmt.Printf("%v", parsedTime.Hour())
 		date_pts += 10
 	}
 
