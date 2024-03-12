@@ -1,4 +1,4 @@
-# receipt-processor
+# Receipt Processor take home assignment
 
 Hi!
 
