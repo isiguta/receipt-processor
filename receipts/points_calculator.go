@@ -48,7 +48,7 @@ func processTotalAmount(total string) int {
 	return total_pts
 }
 
-func processItems(items []Item) int {
+func processItems(items []item) int {
 	items_pts := (len(items) / 2) * 5
 	for _, item := range items {
 		trimmed_description := strings.TrimSpace(item.ShortDescription)
@@ -65,16 +65,9 @@ func processItems(items []Item) int {
 
 func processPurchaseDateTime(date string, t string) int {
 	date_pts := 0
-	parsedDate, date_err := time.Parse("2006-01-02", date)
-	parsedTime, time_err := time.Parse("15:04", t)
 
-	if date_err != nil {
-
-	}
-
-	if time_err != nil {
-
-	}
+	parsedDate, _ := time.Parse("2006-01-02", date)
+	parsedTime, _ := time.Parse("15:04", t)
 
 	if parsedDate.Day()%2 != 0 {
 		date_pts += 6

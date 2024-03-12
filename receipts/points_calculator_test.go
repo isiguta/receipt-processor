@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func SetUpReceipt(retailer string, purchaseDate string, purchaseTime string, total string, items []Item) receipt {
+func SetUpReceipt(retailer string, purchaseDate string, purchaseTime string, total string, items []item) receipt {
 	return receipt{
 		Retailer:     retailer,
 		PurchaseDate: purchaseDate,
@@ -18,7 +18,7 @@ func SetUpReceipt(retailer string, purchaseDate string, purchaseTime string, tot
 func TestCalculatePointsExample1(t *testing.T) {
 
 	// Arrange
-	receipt := SetUpReceipt("Target", "2024-03-11", "12:01", "35.35", []Item{
+	receipt := SetUpReceipt("Target", "2024-03-11", "12:01", "35.35", []item{
 		{ShortDescription: "Mountain Dew 12PK", Price: "6.49"},
 		{ShortDescription: "Emils Cheese Pizza", Price: "12.25"},
 		{ShortDescription: "Knorr Creamy Chicken", Price: "1.26"},
@@ -38,7 +38,7 @@ func TestCalculatePointsExample1(t *testing.T) {
 
 func TestCalculatePointsExample2(t *testing.T) {
 	// Arrange
-	receipt := SetUpReceipt("M&M Corner Market", "2023-03-20", "14:33", "9.00", []Item{
+	receipt := SetUpReceipt("M&M Corner Market", "2023-03-20", "14:33", "9.00", []item{
 		{ShortDescription: "Gatorade", Price: "2.25"},
 		{ShortDescription: "Gatorade", Price: "2.25"},
 		{ShortDescription: "Gatorade", Price: "2.25"},
