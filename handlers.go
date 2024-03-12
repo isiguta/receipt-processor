@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,13 +25,8 @@ func postReceipt(c *gin.Context) {
 		return
 	}
 
-	var incomingReceipt receipt
-
-	if err := c.BindJSON(&incomingReceipt); err != nil {
-		log.Printf("Error: Invalid JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	}
+	validatedReceipt, _ := c.Get("validatedReceipt")
+	incomingReceipt := validatedReceipt.(receipt)
 
 	// Generate receipt id here
 	incomingReceipt.ID = uuid.New().String()

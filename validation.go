@@ -12,8 +12,8 @@ import (
 func validateReceipt(c *gin.Context) {
 	var r receipt
 	if err := c.ShouldBindJSON(&r); err != nil {
-		fmt.Println("Could not validate JSON:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+		errorMessage, _ := fmt.Printf("Invalid JSON: %v", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": errorMessage})
 		c.Abort()
 		return
 	}
@@ -67,5 +67,6 @@ func validateReceipt(c *gin.Context) {
 		return
 	}
 
+	c.Set("validatedReceipt", r)
 	c.Next()
 }
