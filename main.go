@@ -52,8 +52,6 @@ func postReceipt(c *gin.Context) {
 	incomingReceipt.ID = uuid.New().String()
 
 	receipts[incomingReceipt.ID] = incomingReceipt
-	fmt.Printf("RECEIPT: %v\n", incomingReceipt)
-	fmt.Printf("ID: %v", incomingReceipt.ID)
 	response := ProcessReceiptResponse{
 		ID: incomingReceipt.ID,
 	}
